@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { ScApp } from './app.styled';
+import AddName from './components/AddName';
 import CustomerCard from './components/CustomerCard';
 import ReservationCard from './components/ReservationCard';
 import { addReservation } from './features/reservationSlice';
@@ -9,7 +10,7 @@ const App = () => {
   const [addName, setAddName] = useState("");
 
   const reservations = useSelector(state => state.reservationStr.value);
-  // const customers = useSelector(state => state.customerStr.value);
+  const customers = useSelector(state => state.customerStr.value);
 
   const dispatch = useDispatch();
 
@@ -23,15 +24,8 @@ const App = () => {
 
   return (
     <ScApp>
-      
       <div className="left">
-        <div className="inputContainer">
-          <h3>Add Guests' name</h3>
-          <form onSubmit={handleAddName}>
-          <input type="text" placeholder="Guest Name..." value={addName} onChange={(ev)=>setAddName(ev.target.value)}/>
-          <button type="submit">Add Name</button>
-          </form>
-        </div>
+       <AddName addName={addName} setAddName={setAddName} handleAddName={handleAddName}/>
         <div className="reservationContainer">
           <h3>Reservations</h3>
           {reservations.map((name, index) => (
@@ -40,8 +34,12 @@ const App = () => {
         
         </div>
       </div>
+      <div className="line"></div>
       <div className="right">
-        <CustomerCard />
+      <h3>Customers:</h3>
+        {customers.map(customer => (
+        <CustomerCard key={customer.id} id={customer.id} name={customer.name} foods={customer.food} />
+        ))}
       </div>
     </ScApp>
   )
